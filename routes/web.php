@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Livewire\RegisterPost;
 use Illuminate\Routing\RouteGroup;
 
 /*
@@ -15,11 +16,13 @@ use Illuminate\Routing\RouteGroup;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (){
     return view('index');
 })->name('home');
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/register', 'register')->name('regist');
     Route::get('/login', 'login')->name('login');
+    Route::post('/register-save', 'registerSave')->name('registerSave');
+    Route::post('/login-action', 'loginAction')->name('loginAction');
 });
