@@ -64,4 +64,21 @@ class UsersController extends Controller
             'recordsFiltered' => $totalRecord
         ]);
     }
+
+    public function dataPelanggan() {
+        $pelanggans = User::where('role', 'pelanggan')->get();
+
+        return view('admins.pelanggan', compact('pelanggans'));
+    }
+
+    public function allPelanggan() {
+        $query = User::where('role', 'pelanggan')->get();
+        $totalRecord = $query->count();
+
+        return response()->json([
+            'data' => $query,
+            'recordsTotal' => $totalRecord,
+            'recordsFiltered' => $totalRecord
+        ]);
+    }
 }

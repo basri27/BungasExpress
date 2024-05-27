@@ -153,7 +153,7 @@
 
             @if (Auth::user()->role == 'admin')
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="{{ route('barang') }}">
+                    <a class="nav-link collapsed" href="{{ route('pelanggan') }}">
                         <i class="bi bi-people"></i>
                         <span>Data Pelanggan</span>
                     </a>
@@ -245,7 +245,7 @@
             let s = today.getSeconds();
             m = checkTime(m);
             s = checkTime(s);
-            // $('#txt').append(h + ":" + m + ":" + s)
+
             document.getElementById('txt').innerHTML = h + ":" + m + ":" + s;
             setTimeout(startTime, 1000);
         }

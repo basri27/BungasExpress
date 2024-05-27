@@ -34,6 +34,8 @@ Route::controller(UsersController::class)->group(function() {
     Route::get('/dashboard}', 'dashboard')->name('dashboard');
     Route::get('/profile', 'profile')->name('profil');
     Route::get('/data-barang', 'dataBarang')->name('barang');
-    Route::get('get-all-data', 'allBarang')->name('allBarang');
+    Route::get('get-all-data-barang', 'allBarang')->name('allBarang');
     Route::get('get-barang-today', 'barangToday');
+    Route::get('/data-pelanggan', 'dataPelanggan')->name('pelanggan');
+    Route::get('get-all-data-pelanggan', 'allPelanggan')->name('allPelanggan');
 });
