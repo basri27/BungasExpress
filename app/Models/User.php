@@ -47,4 +47,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function barang(){
+        return $this->hasMany(Barang::class);
+    }
+
+    public function keluhan(){
+        return $this->hasMany(Keluhan::class);
+    }
 }

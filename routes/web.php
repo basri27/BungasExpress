@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UsersController;
 use App\Livewire\RegisterPost;
 use Illuminate\Routing\RouteGroup;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +27,13 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'login')->name('login');
     Route::post('/register-save', 'registerSave')->name('registerSave');
     Route::post('/login-action', 'loginAction')->name('loginAction');
+    Route::get('/logout','logout')->name('logout');
+});
+
+Route::controller(UsersController::class)->group(function() {
+    Route::get('/dashboard}', 'dashboard')->name('dashboard');
+    Route::get('/profile', 'profile')->name('profil');
+    Route::get('/data-barang', 'dataBarang')->name('barang');
+    Route::get('get-all-data', 'allBarang')->name('allBarang');
+    Route::get('get-barang-today', 'barangToday');
 });

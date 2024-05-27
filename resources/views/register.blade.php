@@ -34,31 +34,45 @@
                 <h3>New Account?</h3>
                 <div class="form-holder">
                     <span class="lnr lnr-user"></span>
-                    <input name="username" type="text" value="{{ old('username') }}" class="form-control"
-                        placeholder="Username" required>
-                    {{-- @error('username')
-                        {{ $message }}
-                    @enderror --}}
+                    <input name="username" type="text" value="{{ old('username') }}"
+                        class="form-control @error('username') is-invalid @enderror" placeholder="Username" required>
                 </div>
+                @error('username')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <div class="form-holder">
                     <span class="lnr lnr-phone-handset"></span>
-                    <input name="no_hp" type="text" value="{{ old('no_hp') }}" class="form-control"
-                        placeholder="No. Handphone" required>
+                    <input name="no_hp" type="text" value="{{ old('no_hp') }}"
+                        class="form-control @error('no_hp') is-invalid @enderror" placeholder="No. Handphone" required>
                 </div>
+                @error('no_hp')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <div class="form-holder">
                     <span class="lnr lnr-user"></span>
-                    <input name="nama" type="text" value="{{ old('nama') }}" class="form-control"
-                        placeholder="Name" required>
+                    <input name="nama" type="text" value="{{ old('nama') }}"
+                        class="form-control @error('nama') is-invalid @enderror" placeholder="Name" required>
                 </div>
+                @error('nama')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <div class="form-holder">
                     <span class="lnr lnr-lock"></span>
-                    <input name="password" type="password" class="form-control" placeholder="Password" required>
+                    <input name="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                        placeholder="Password" required>
                 </div>
+                @error('password')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <div class="form-holder">
                     <span class="lnr lnr-lock"></span>
-                    <input name="password_confirmation" type="password" class="form-control"
+                    <input name="password_confirmation" type="password"
+                        class="form-control @error('password_confirmation') is-invalid @enderror"
                         placeholder="Confirm Password" required>
                 </div>
+                @error('password_confirmation')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <button>
                     <span>Register</span>
                 </button>
@@ -104,32 +118,6 @@
             }
         });
     </script>
-    {{-- <script src="{{ asset('login/js/main.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
-    <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function() {
-            'use strict'
-
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.querySelectorAll('.needs-validation')
-
-            // Loop over them and prevent submission
-            Array.prototype.slice.call(forms)
-                .forEach(function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
-
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-        })()
-    </script> --}}
 
 </body>
 <!-- This templates was made by Colorlib (https://colorlib.com) -->

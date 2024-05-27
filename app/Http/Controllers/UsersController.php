@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Barang;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+class UsersController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
+    public function dashboard() {
+        $today = Barang::whereDate('created_at', 'Carbon::now()')->get();
+        $pesananToday = $today->count();
+        $pelangganToday = $today->groupBy('user_id')->count();
+
+        if (Auth::user()->role == "admin") {
+            return view('admins.dashboard', compact('pesananToday', 'pelangganToday'));
+        } elseif (Auth::user()->role == "pelanggan") {
+            return view('users.dashboard', compact('user'));
+        }
+        
+    }
+
+    public function barangToday(Request $request){
+        $query = Barang::with('user')->whereDate('created_at', Carbon::now());
+        $today = $query->orderBy('created_at', 'DESC')->take(5)->get();
+        $totalRecord = $today->count();
+
+        return response()->json([
+            'data' => $today,
+            'recordsTotal' => $totalRecord,
+            'recordsFiltered' => $totalRecord
+        ]);
+    }
+
+    public function profile() {
+        $user = Auth::user();
+
+        return view('layouts.profile', compact('user'));
+    }
+
+    public function dataBarang() {
+        $barangs = Barang::with('user')->get();
+        $pelanggan = User::where('role', 'pelanggan')->get();
+
+        return view('admins.barang', compact('barangs', 'pelanggan'));
+    }
+
+    public function allBarang(Request $request) {
+        $query = Barang::with('user')->get();
+        $totalRecord = $query->count();
+
+        return response()->json([
+            'data' => $query,
+            'recordsTotal' => $totalRecord,
+            'recordsFiltered' => $totalRecord
+        ]);
+    }
+}

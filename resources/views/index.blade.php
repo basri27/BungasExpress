@@ -22,15 +22,14 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    {{-- <link href="{{ asset('/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
-
-    <link href="{{ asset('/css/core.css') }}" rel="stylesheet">
-
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
+    <link href="{{ asset('/css/core.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/templatemo-topic-listing.css') }}" rel="stylesheet">
 
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    {{-- <link href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet"> --}}
+
 
     {{-- TemplateMo 590 topic listing (https://templatemo.com/tm-590-topic-listing) --}}
 </head>
@@ -57,20 +56,22 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_2">Pelayanan</a>
+                            <a class="nav-link click-scroll" href="#section_2">Cara Menggunakan</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_3">Cara Menggunakan</a>
+                            <a class="nav-link click-scroll" href="#section_3">Kontak</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_4">Kontak</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">Masuk/Daftar</a>
-                        </li>
+                        @guest
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">Masuk/Daftar</a>
+                            </li>
+                        @endguest
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
+                            </li>
+                        @endauth
 
                     </ul>
                 </div>
@@ -130,7 +131,7 @@
             </div>
         </section>
 
-        <section class="timeline-section section-padding" id="section_3">
+        <section class="timeline-section section-padding" id="section_2">
             <div class="section-overlay"></div>
 
             <div class="container">
@@ -192,7 +193,7 @@
             </div>
         </section>
 
-        <section class="contact-section section-padding section-bg" id="section_4">
+        <section class="contact-section section-padding section-bg" id="section_3">
             <div class="container">
                 <div class="row">
 
@@ -396,6 +397,67 @@
                             </div>
                         </div>
                     </section>
+                    <!-- Recent Activity -->
+                    {{-- <div class="card">
+
+                        <div class="card-body">
+
+                            <div class="activity">
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">32 min</div>
+                                    <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                                    <div class="activity-content">
+                                        Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo
+                                            officiis</a> beatae
+                                    </div>
+                                </div><!-- End activity item-->
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">56 min</div>
+                                    <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                                    <div class="activity-content">
+                                        Voluptatem blanditiis blanditiis eveniet
+                                    </div>
+                                </div><!-- End activity item-->
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">2 hrs</div>
+                                    <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                                    <div class="activity-content">
+                                        Voluptates corrupti molestias voluptatem
+                                    </div>
+                                </div><!-- End activity item-->
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">1 day</div>
+                                    <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                                    <div class="activity-content">
+                                        Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati
+                                            voluptatem</a> tempore
+                                    </div>
+                                </div><!-- End activity item-->
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">2 days</div>
+                                    <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                                    <div class="activity-content">
+                                        Est sit eum reiciendis exercitationem
+                                    </div>
+                                </div><!-- End activity item-->
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">4 weeks</div>
+                                    <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
+                                    <div class="activity-content">
+                                        Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
+                                    </div>
+                                </div><!-- End activity item-->
+
+                            </div>
+
+                        </div>
+                    </div><!-- End Recent Activity --> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
