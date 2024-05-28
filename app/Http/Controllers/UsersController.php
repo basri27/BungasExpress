@@ -81,4 +81,10 @@ class UsersController extends Controller
             'recordsFiltered' => $totalRecord
         ]);
     }
+
+    public function tambahBarang() {
+        $pelanggans = User::where('role', 'pelanggan')->get();
+
+        return view('admins.add-barang', compact('pelanggans'));
+    }
 }

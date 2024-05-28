@@ -38,4 +38,5 @@ Route::controller(UsersController::class)->group(function() {
     Route::get('get-barang-today', 'barangToday');
     Route::get('/data-pelanggan', 'dataPelanggan')->name('pelanggan');
     Route::get('get-all-data-pelanggan', 'allPelanggan')->name('allPelanggan');
+    Route::get('/tambah-barang', 'tambahBarang')->name('tambahBarang');
 });

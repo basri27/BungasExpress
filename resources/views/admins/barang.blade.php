@@ -141,7 +141,7 @@
                     buttons: [{
                         text: 'Tambah',
                         action: function(e, dt, node, config) {
-                            window.location.href = 'profile'
+                            window.location.href = 'tambah-barang'
                             // $('#tambahPelanggan').modal('show')
                         }
                     }, 'copy', 'csv', 'print', 'colvis'],
