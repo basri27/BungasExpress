@@ -7,6 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
@@ -29,7 +30,7 @@ class UsersController extends Controller
         
     }
 
-    public function barangToday(Request $request){
+    public function barangToday(){
         $query = Barang::with('user')->whereDate('created_at', Carbon::now());
         $today = $query->orderBy('created_at', 'DESC')->take(5)->get();
         $totalRecord = $today->count();
@@ -54,8 +55,8 @@ class UsersController extends Controller
         return view('admins.barang', compact('barangs', 'pelanggan'));
     }
 
-    public function allBarang(Request $request) {
-        $query = Barang::with('user')->get();
+    public function allBarang() {
+        $query = Barang::with('user')->orderBy('id')->get();
         $totalRecord = $query->count();
 
         return response()->json([
@@ -86,5 +87,12 @@ class UsersController extends Controller
         $pelanggans = User::where('role', 'pelanggan')->get();
 
         return view('admins.add-barang', compact('pelanggans'));
+    }
+
+    public function editBarang($resiBarang) {
+        $pelanggans = User::where('role', 'pelanggan')->get();
+        $barang = Barang::with('user')->where('no_resi', $resiBarang)->first();
+
+        return view('admins.edit-barang', compact('pelanggans', 'barang'));
     }
 }

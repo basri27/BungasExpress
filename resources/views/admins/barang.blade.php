@@ -107,7 +107,10 @@
 @endsection
 
 @section('custom-js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"
+        integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o=" crossorigin="anonymous"></script>
     <script>
+        var encrypted = CryptoJS.AES.encrypt("Message", "Secret Passphrase");
         new DataTable('#data-barang', {
             processing: true,
             ajax: {
@@ -127,12 +130,13 @@
                 data: 'status_barang'
             }, {
                 "mRender": function(data, type, full) {
-                    return '<a class="btn btn-warning btn-sm m-1" href=#edit' +
-                        full.no_resi + '>' + '<i class="bi bi-pencil-square"></i>' +
+                    return '<a class="btn btn-warning btn-sm m-1" href=data-barang/edit-barang/' + full
+                        .no_resi + '>' + '<i class="bi bi-pencil-square"></i>' +
                         '</a><a data-bs-toggle="modal" class="btn btn-danger btn-sm m-1" href=#hapus' +
                         full.no_resi + '>' +
                         '<i class="bi bi-trash"></i>' +
-                        '</a><a class="btn btn-secondary btn-sm m-1" href=#ahapus' + full.no_resi +
+                        '</a><a data-bs-toggle="modal" class="btn btn-secondary btn-sm m-1" href=#lokasi' +
+                        full.no_resi +
                         '>' + '<i class="bi bi-pin-map"></i>' + '</a>';
                 }
             }],
