@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Lokasi;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -94,5 +95,13 @@ class UsersController extends Controller
         $barang = Barang::with('user')->where('no_resi', $resiBarang)->first();
 
         return view('admins.edit-barang', compact('pelanggans', 'barang'));
+    }
+
+    public function lokasiBarang($resiBarang) {
+        $barang = Barang::with('user')->where('no_resi', $resiBarang)->first();
+        $lokasis = Lokasi::where('barang_id', $barang->id)->get();
+        // dd($lokasis, $barang);
+
+        return view('admins.lokasi-barang', compact('barang', 'lokasis'));
     }
 }
