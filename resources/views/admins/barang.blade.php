@@ -83,7 +83,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="button" class="btn btn-primary">Yakin</button>
                     </div>
                 </div>
@@ -130,7 +130,7 @@
                     buttons: [{
                         text: 'Tambah',
                         action: function(e, dt, node, config) {
-                            window.location.href = 'tambah-barang'
+                            window.location.href = 'data-barang/tambah-barang'
                             // $('#tambahPelanggan').modal('show')
                         }
                     }, 'copy', 'csv', 'print', 'colvis'],

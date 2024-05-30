@@ -19,14 +19,21 @@ class UsersController extends Controller
     }
     
     public function dashboard() {
-        $today = Barang::whereDate('created_at', 'Carbon::now()')->get();
+        $today = Barang::whereDate('created_at', Carbon::now())->get();
+        $yesterday = Barang::whereDate('created_at', Carbon::yesterday())->get();
         $pesananToday = $today->count();
         $pelangganToday = $today->groupBy('user_id')->count();
+        $pesananYesterday = $yesterday->count();
+        $pelangganYesterday = $yesterday->groupBy('user_id')->count();
+        $totalBarang = Barang::count();
+        $totalPelanggan = User::where('role', 'pelanggan')->count();
+        $percentagePesanan = ($pesananToday-$pesananYesterday)/$pesananYesterday*100;
+        $percentagePelanggan = ($pelangganToday-$pelangganYesterday)/$pelangganYesterday*100;
 
         if (Auth::user()->role == "admin") {
-            return view('admins.dashboard', compact('pesananToday', 'pelangganToday'));
+            return view('admins.dashboard', compact('pesananToday', 'pelangganToday', 'percentagePesanan', 'percentagePelanggan'));
         } elseif (Auth::user()->role == "pelanggan") {
-            return view('users.dashboard', compact('user'));
+            return view('users.dashboard', compact('user', 'totalBarang', 'totalPelanggan'));
         }
         
     }
@@ -99,8 +106,7 @@ class UsersController extends Controller
 
     public function lokasiBarang($resiBarang) {
         $barang = Barang::with('user')->where('no_resi', $resiBarang)->first();
-        $lokasis = Lokasi::where('barang_id', $barang->id)->get();
-        // dd($lokasis, $barang);
+        $lokasis = Lokasi::where('barang_id', $barang->id)->orderBy('created_at', 'desc')->get();
 
         return view('admins.lokasi-barang', compact('barang', 'lokasis'));
     }

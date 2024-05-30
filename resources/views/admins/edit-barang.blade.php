@@ -46,15 +46,10 @@
                         <div class="col-md-6 mb-3">
                             <label for="jenis-pembayaran">Jenis Pembayaran</label>
                             <select name="jenis-pembayaran" id="pembayaran">
-                                @if ($barang->jenis_pembayaran == 'COD')
-                                    <option value="{{ $barang->jenis_pembayaran }}" selected hidden>
-                                        {{ $barang->jenis_pembayaran }}</option>
-                                    <option value="Non-COD">Non-COD</option>
-                                @else
-                                    <option value="{{ $barang->jenis_pembayaran }}" selected hidden>
-                                        {{ $barang->jenis_pembayaran }}</option>
-                                    <option value="COD">COD</option>
-                                @endif
+                                <option value="{{ $barang->jenis_pembayaran }}" selected hidden>
+                                    {{ $barang->jenis_pembayaran }}</option>
+                                <option value="COD">COD</option>
+                                <option value="Non-COD">Non-COD</option>
                             </select>
                         </div>
                     </div>

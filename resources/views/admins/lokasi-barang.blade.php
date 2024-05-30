@@ -48,18 +48,33 @@
                     </div>
                 </form>
                 <hr>
-                <div class="activity" style="width: 100%">
+                <div class="activity">
                     @foreach ($lokasis as $item)
                         <div class="activity-item d-flex">
-                            <div class="activite-label">
-                                {{ Carbon\Carbon::parse($item->created_at)->format('d M Y') }}
-                                <br>
-                                {{ Carbon\Carbon::parse($item->created_at)->format('H:i') }}
-                            </div>
-                            <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                            <div class="activity-content">
-                                {{ $item->posisi }}
-                            </div>
+
+                            @if ($loop->last)
+                                <div class="activite-label col-4 text-end">
+                                    {{ Carbon\Carbon::parse($item->created_at)->format('d M Y') }}
+                                    <br>
+                                    {{ Carbon\Carbon::parse($item->created_at)->format('H:i') }}
+                                </div>
+
+                                <i class="bi bi-circle-fill activity-badge text-success align-self-end"></i>
+                                <div class="activity-content align-self-end">
+                                    {{ $item->posisi }}
+                                </div>
+                            @else
+                                <div class="activite-label col-4 text-end ">
+                                    {{ Carbon\Carbon::parse($item->created_at)->format('d M Y') }}
+                                    <br>
+                                    {{ Carbon\Carbon::parse($item->created_at)->format('H:i') }}
+                                </div>
+
+                                <i class="bi bi-circle-fill activity-badge text-success align-self-start"></i>
+                                <div class="activity-content">
+                                    {{ $item->posisi }}
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
@@ -98,6 +113,11 @@
                             <label for="jenis_pembayaran">Jenis Pembayaran</label>
                             <input type="text" name="jenis_pembayaran" class="form-control"
                                 value="{{ $barang->jenis_pembayaran }}" disabled>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label for="created_at">Tanggal</label>
+                            <input type="text" class="form-control"
+                                value="{{ Carbon\Carbon::parse($barang->created_at)->format('d F Y | H:i:s') }}" disabled>
                         </div>
                     </div>
                 </div>
