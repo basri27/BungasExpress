@@ -27,13 +27,17 @@
                             <h6>{{ $pesananToday }} <small><i class="bi bi-arrow-up-circle-fill text-success"></i></small>
                             </h6>
                             <span class="text-muted small pt-2 ps-1">meningkat</span>
-                            <span class="text-success small mt-0 fw-bold">{{ $percentagePesanan }}%</span>
+                            <span class="text-success small mt-0 fw-bold">
+                                <i class="bi bi-arrow-up"></i>{{ $percentagePesanan }}%
+                            </span>
                             <span class="text-muted small pt-2 ps-1">dari pesanan kemarin</span>
                         @elseif ($percentagePesanan < 0)
                             <h6>{{ $pesananToday }} <small><i class="bi bi-arrow-down-circle-fill text-danger"></i></small>
                             </h6>
                             <span class="text-muted small pt-2 ps-1">menurun</span>
-                            <span class="text-danger small mt-0 fw-bold">{{ abs($percentagePesanan) }}%</span>
+                            <span class="text-danger small mt-0 fw-bold">
+                                <i class="bi bi-arrow-down"></i>{{ abs($percentagePesanan) }}%
+                            </span>
                             <span class="text-muted small pt-2 ps-1">dari pesanan kemarin</span>
                         @else
                             <h6>{{ $pesananToday }} <small><i class="bi bi-emoji-smile-fill text-warning"></i></small>
@@ -59,14 +63,18 @@
                             <h6>{{ $pelangganToday }} <small><i class="bi bi-arrow-up-circle-fill text-success"></i></small>
                             </h6>
                             <span class="text-muted small pt-2 ps-1">meningkat</span>
-                            <span class="text-success small mt-0 fw-bold">{{ $percentagePelanggan }}%</span>
+                            <span class="text-success small mt-0 fw-bold">
+                                <i class="bi bi-arrow-up"></i>{{ $percentagePelanggan }}%
+                            </span>
                             <span class="text-muted small pt-2 ps-1">dari pesanan kemarin</span>
                         @elseif ($percentagePelanggan < 0)
                             <h6>{{ $pelangganToday }} <small><i
                                         class="bi bi-arrow-down-circle-fill text-danger"></i></small>
                             </h6>
                             <span class="text-muted small pt-2 ps-1">menurun</span>
-                            <span class="text-danger small mt-0 fw-bold">{{ abs($percentagePelanggan) }}%</span>
+                            <span class="text-danger small mt-0 fw-bold">
+                                <i class="bi bi-arrow-down"></i>{{ abs($percentagePelanggan) }}%
+                            </span>
                             <span class="text-muted small pt-2 ps-1">dari pesanan kemarin</span>
                         @else
                             <h6>{{ $pelangganToday }} <small><i class="bi bi-emoji-smile-fill text-warning"></i></small>

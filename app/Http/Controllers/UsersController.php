@@ -27,8 +27,17 @@ class UsersController extends Controller
         $pelangganYesterday = $yesterday->groupBy('user_id')->count();
         $totalBarang = Barang::count();
         $totalPelanggan = User::where('role', 'pelanggan')->count();
-        $percentagePesanan = ($pesananToday-$pesananYesterday)/$pesananYesterday*100;
-        $percentagePelanggan = ($pelangganToday-$pelangganYesterday)/$pelangganYesterday*100;
+        if($pesananToday != 0 && $pesananYesterday != 0) {
+            $percentagePesanan = ($pesananToday-$pesananYesterday)/$pesananYesterday*100;
+        }elseif ($pesananYesterday == 0) {
+            $percentagePesanan = $pesananToday*100;
+        }
+
+        if($pelangganToday != 0 && $pelangganYesterday != 0) {
+            $percentagePelanggan = ($pelangganToday-$pelangganYesterday)/$pelangganYesterday*100;
+        }elseif ($pelangganYesterday == 0) {
+            $percentagePelanggan = $pelangganToday*100;
+        }
 
         if (Auth::user()->role == "admin") {
             return view('admins.dashboard', compact('pesananToday', 'pelangganToday', 'percentagePesanan', 'percentagePelanggan'));

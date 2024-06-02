@@ -122,7 +122,9 @@
                             </div>
                             <div class="d-flex justify-content-center">
                                 <div id="detailBarang">
-                                    <p class="text-secondary m-4" id="no-data">No data...</p>
+                                    <center>
+                                        <p class="text-secondary m-4" id="no-data">No data...</p>
+                                    </center>
                                     <div id="data-barang" style="display: none">
                                         <h5 class="mb-2">Detail Paket</h5>
 
@@ -365,75 +367,79 @@
                 var noData = document.getElementById('no-data');
                 var loading = document.getElementById('loading');
                 var loadingBar = document.getElementById('loading-bar');
-                var tgl = document.getElementById('tgl-lokasi');
-                var jam = document.getElementById('jam-lokasi');
-                var posisi = document.getElementById('posisi');
-                var riwayat = document.getElementById('riwayat-lokasi');
 
-                detail.style.display = 'none';
-                noData.style.display = 'none';
-                loading.style.display = 'block';
-                loadingBar.style.width = '0%';
-                loadingBar.innerHTML = '0%';
-                setTimeout(() => {
-                    loadingBar.style.width = '25%';
-                    loadingBar.innerHTML = '25%';
-                }, 500);
-                setTimeout(() => {
-                    loadingBar.style.width = '50%';
-                    loadingBar.innerHTML = '50%';
-                }, 1000);
-                setTimeout(() => {
-                    loadingBar.style.width = '75%';
-                    loadingBar.innerHTML = '75%';
-                }, 1250);
-                setTimeout(() => {
-                    loadingBar.style.width = '100%';
-                    loadingBar.innerHTML = '100%';
-                }, 1500);
-                setTimeout(() => {
-                    $.ajax({
-                        url: "{{ route('searchBarang') }}",
-                        type: 'POST',
-                        dataType: "json",
-                        data: {
-                            resi: resi
-                        },
-                        success: function(data) {
-                            let values = Object.values(data);
+                if (resi == null || resi == "") {
+                    noData.innerHTML = "Anda harus mengisi nomor resi terlebih dahulu";
+                    noData.style.display = 'block';
+                    detail.style.display = 'none';
+                } else {
+                    detail.style.display = 'none';
+                    noData.style.display = 'none';
+                    loading.style.display = 'block';
+                    loadingBar.style.width = '0%';
+                    loadingBar.innerHTML = '0%';
+                    setTimeout(() => {
+                        loadingBar.style.width = '25%';
+                        loadingBar.innerHTML = '25%';
+                    }, 500);
+                    setTimeout(() => {
+                        loadingBar.style.width = '50%';
+                        loadingBar.innerHTML = '50%';
+                    }, 1000);
+                    setTimeout(() => {
+                        loadingBar.style.width = '75%';
+                        loadingBar.innerHTML = '75%';
+                    }, 1250);
+                    setTimeout(() => {
+                        loadingBar.style.width = '100%';
+                        loadingBar.innerHTML = '100%';
+                    }, 1500);
+                    setTimeout(() => {
+                        $.ajax({
+                            url: "{{ route('searchBarang') }}",
+                            type: 'POST',
+                            dataType: "json",
+                            data: {
+                                resi: resi
+                            },
+                            success: function(data) {
+                                let values = Object.values(data);
 
 
-                            loading.style.display = 'none';
-                            detail.style.display = 'block';
-                            no_resi.innerHTML = 'No. Resi: ' + values[0]['no_resi'];
-                            pemilik.innerHTML = 'Pemilik: ' + values[0]['user']['nama'];
-                            $('#riwayat-lokasi').empty();
+                                loading.style.display = 'none';
+                                detail.style.display = 'block';
+                                no_resi.innerHTML = 'No. Resi: ' + values[0]['no_resi'];
+                                pemilik.innerHTML = 'Pemilik: ' + values[0]['user']['nama'];
+                                $('#riwayat-lokasi').empty();
 
-                            let lokasi = values[0]['lokasi'];
-                            if (lokasi.length > 0) {
-                                let data_lokasi = Object.keys(lokasi);
-                                data_lokasi.forEach(key => {
-                                    let date = new Date(lokasi[key]['created_at']);
-                                    dateFormat.masks.hammerTime = 'HH:MM:ss';
+                                let lokasi = values[0]['lokasi'];
+                                if (lokasi.length > 0) {
+                                    let data_lokasi = Object.keys(lokasi);
+                                    data_lokasi.forEach(key => {
+                                        let date = new Date(lokasi[key][
+                                            'created_at'
+                                        ]);
+                                        dateFormat.masks.hammerTime = 'HH:MM:ss';
 
+                                        $('#riwayat-lokasi').append(
+                                            '<div class="single-timeline-area"><div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;"><p>' +
+                                            dateFormat(date, "dd mmm yyyy") +
+                                            '<br>' +
+                                            date.format("hammerTime") +
+                                            '</p></div><div class="row"><div class="col-12 col-md-6 col-lg-12"><div class="single-timeline-content d-flex wow fadeInLeft" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;"><div class="timeline-text"><p id="posisi">' +
+                                            lokasi[key]['posisi'] +
+                                            '</p></div></div></div></div></div>'
+                                        );
+                                    });
+                                } else {
                                     $('#riwayat-lokasi').append(
-                                        '<div class="single-timeline-area"><div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;"><p>' +
-                                        dateFormat(date, "dd mmm yyyy") +
-                                        '<br>' +
-                                        date.format("hammerTime") +
-                                        '</p></div><div class="row"><div class="col-12 col-md-6 col-lg-12"><div class="single-timeline-content d-flex wow fadeInLeft" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;"><div class="timeline-text"><p id="posisi">' +
-                                        lokasi[key]['posisi'] +
-                                        '</p></div></div></div></div></div>');
-                                });
-                            } else {
-                                $('#riwayat-lokasi').append(
-                                    '<hr><p class="text-center">Lokasi barang belum diperbaharui oleh Admin!</p><hr>'
-                                )
+                                        '<hr><p class="text-center">Lokasi barang belum diperbaharui oleh Admin!</p><hr>'
+                                    )
+                                }
                             }
-                        }
-                    })
-
-                }, 2000);
+                        })
+                    }, 2000);
+                }
             }
         });
     </script>
