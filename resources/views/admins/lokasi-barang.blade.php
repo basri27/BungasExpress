@@ -59,8 +59,8 @@
                                     {{ Carbon\Carbon::parse($item->created_at)->format('H:i') }}
                                 </div>
 
-                                <i class="bi bi-circle-fill activity-badge text-success align-self-end"></i>
-                                <div class="activity-content align-self-end">
+                                <i class="bi bi-circle-fill activity-badge text-success align-self-center"></i>
+                                <div class="activity-content align-self-center">
                                     {{ $item->posisi }}
                                 </div>
                             @else

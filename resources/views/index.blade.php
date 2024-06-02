@@ -7,6 +7,7 @@
 
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>Bungas Express | Jasa Pengiriman Barang Banjarmasin, Anjir, dan Kapuas</title>
 
@@ -20,8 +21,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
@@ -88,16 +89,15 @@
 
                         <h6 class="text-center">Jasa pengiriman barang area Banjarmasin-Anjir-Kapuas</h6>
 
-                        <form method="get" class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
+                        <form action="javascript:void(0)" id="form-search" method="post"
+                            class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bi-search" id="basic-addon1">
+                                <span class="input-group-text bi-search" id="basic-addon1"></span>
 
-                                </span>
-
-                                <input name="resi" type="search" class="form-control" id="keyword"
+                                <input name="resi" type="search" class="form-control" id="resi"
                                     placeholder="No. Resi" aria-label="Search">
 
-                                <button id="loading-button" type="submit" class="form-control">Cari</button>
+                                <button type="submit" class="form-control">Cari</button>
                             </div>
                         </form>
                     </div>
@@ -112,16 +112,27 @@
 
                     <div class="col-lg-4 col-12 mb-4 mb-lg-0">
                         <div class="custom-block bg-white shadow-lg">
-                            <div class="d-flex">
-                                <div>
-                                    <h5 class="mb-2">Detail Paket</h5>
+                            <div id="loading" style="display: none">
+                                <p class="text-secondary text-center">Tunggu sebentar...</p>
+                                <div class="progress">
+                                    <div id="loading-bar" class="progress-bar bg-success" role="progressbar"
+                                        style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <div id="detailBarang">
+                                    <p class="text-secondary m-4" id="no-data">No data...</p>
+                                    <div id="data-barang" style="display: none">
+                                        <h5 class="mb-2">Detail Paket</h5>
 
-                                    <h6 class="mb-0">No. Resi: JP5106647459</h6>
-                                    <p class="copyright-text">Pemilik: M. Basri</p>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal"
-                                        data-target="#exampleModal">
-                                        Lacak Paket
-                                    </button>
+                                        <h6 class="mb-0" id="no-resi"></h6>
+                                        <p class="copyright-text" id="pemilik"></p>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                            data-target="#exampleModal">
+                                            Lacak Paket
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +149,7 @@
                 <div class="row">
 
                     <div class="col-12 text-center">
-                        <h2 class="text-white mb-4">How does it work?</h1>
+                        <h2 class="text-white mb-4">Bagaimana caranya?</h1>
                     </div>
 
                     <div class="col-lg-10 col-12 mx-auto">
@@ -149,11 +160,12 @@
                                 </div>
 
                                 <li>
-                                    <h4 class="text-white mb-3">Search your favourite topic</h4>
+                                    <h4 class="text-white mb-3">Cari barang Anda</h4>
 
-                                    <p class="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                        Reiciendis, cumque magnam? Sequi, cupiditate quibusdam alias illum sed esse ad
-                                        dignissimos libero sunt, quisquam numquam aliquam? Voluptas, accusamus omnis?
+                                    <p class="text-white">Anda dapat melakukan pengecekan lokasi barang Anda dengan
+                                        memasukkan nomor resi pada kolom pencarian. Kemudian sistem akan mencari data
+                                        barang Anda
+                                        dan menampilkannya.
                                     </p>
 
                                     <div class="icon-holder">
@@ -162,27 +174,25 @@
                                 </li>
 
                                 <li>
-                                    <h4 class="text-white mb-3">Bookmark &amp; Keep it for yourself</h4>
+                                    <h4 class="text-white mb-3">Cek &amp; Kenali</h4>
 
-                                    <p class="text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                                        Sint animi necessitatibus aperiam repudiandae nam omnis est vel quo, nihil
-                                        repellat quia velit error modi earum similique odit labore. Doloremque,
-                                        repudiandae?</p>
+                                    <p class="text-white">Setelah data barang Anda ditemukan, Anda dapat mengecek dan
+                                        melihat informasi mengenai barang Anda seperti nomor resi, pemilik barang, serta
+                                        lokasi barang Anda.</p>
 
                                     <div class="icon-holder">
-                                        <i class="bi-bookmark"></i>
+                                        <i class="bi-bag-check"></i>
                                     </div>
                                 </li>
 
                                 <li>
-                                    <h4 class="text-white mb-3">Read &amp; Enjoy</h4>
+                                    <h4 class="text-white mb-3">Puas &amp; Tidak Penasaran</h4>
 
-                                    <p class="text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                                        Animi vero quisquam, rem assumenda similique voluptas distinctio, iste est hic
-                                        eveniet debitis ut ducimus beatae id? Quam culpa deleniti officiis autem?</p>
+                                    <p class="text-white">Anda pun dapat melihat riwayat lokasi barang Anda, sehingga
+                                        Anda tidak perlu bertanya-tanya dimana lokasi barang Anda.</p>
 
                                     <div class="icon-holder">
-                                        <i class="bi-book"></i>
+                                        <i class="bi-emoji-smile"></i>
                                     </div>
                                 </li>
                             </ul>
@@ -198,7 +208,7 @@
                 <div class="row">
 
                     <div class="col-lg-12 col-12 text-center">
-                        <h2 class="mb-5">Get in touch</h2>
+                        <h2 class="mb-5">Temukan Kami</h2>
                     </div>
 
                     <div class="col-lg-5 col-12 mb-4 mb-lg-0">
@@ -207,55 +217,41 @@
                             width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"></iframe> --}}
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d342.1462138727321!2d114.39847688407147!3d-2.9946827223148773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sid!2sid!4v1713947035317!5m2!1sid!2sid"
-                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.3206504167183!2d114.4019379!3d-3.0081555!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de46ff52d91fea5%3A0x4fb183b1c92572e4!2sOlshop%20bungas%20dan%20bungas%20express%20kapuas!5e0!3m2!1sid!2sid!4v1717149920506!5m2!1sid!2sid"
+                            width="100%" height="270" style="border:0;" allowfullscreen="" loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-12 mb-3 mb-lg- mb-md-0 ms-auto">
-                        <h4 class="mb-3">Head office</h4>
+                        <h4 class="mb-3">Bungas Express Kuala Kapuas</h4>
 
-                        <p>Bay St &amp;, Larkin St, San Francisco, CA 94109, United States</p>
+                        <p>Jl. Cilik Riwut No.07, Selat Tengah, Kec. Selat, Kabupaten Kapuas, Kalimantan Tengah 73581
+                        </p>
 
                         <hr>
 
                         <p class="d-flex align-items-center mb-1">
-                            <span class="me-2">Phone</span>
+                            <span class="me-2">WhatsApp</span>
 
                             <a href="tel: 305-240-9671" class="site-footer-link">
-                                305-240-9671
-                            </a>
-                        </p>
-
-                        <p class="d-flex align-items-center">
-                            <span class="me-2">Email</span>
-
-                            <a href="mailto:info@company.com" class="site-footer-link">
-                                info@company.com
+                                &nbsp;089655680487
                             </a>
                         </p>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-12 mx-auto">
-                        <h4 class="mb-3">Dubai office</h4>
+                        <h4 class="mb-3">Bungas Express Banjarmasin</h4>
 
-                        <p>Burj Park, Downtown Dubai, United Arab Emirates</p>
+                        <p>Jl. Hikmah Banua, Pemurus Luar, Kec. Banjarmasin Tim., Kota Banjarmasin, Kalimantan Selatan
+                            70236</p>
 
                         <hr>
 
                         <p class="d-flex align-items-center mb-1">
-                            <span class="me-2">Phone</span>
+                            <span class="me-2">WhatsApp</span>
 
                             <a href="tel: 110-220-3400" class="site-footer-link">
-                                110-220-3400
-                            </a>
-                        </p>
-
-                        <p class="d-flex align-items-center">
-                            <span class="me-2">Email</span>
-
-                            <a href="mailto:info@company.com" class="site-footer-link">
-                                info@company.com
+                                &nbsp;089655680487
                             </a>
                         </p>
                     </div>
@@ -303,10 +299,8 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title" id="exampleModalLabel">Lokasi Barang</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
@@ -316,8 +310,7 @@
                                 <div class="col-12 col-sm-8 col-lg-6">
                                     <!-- Section Heading-->
                                     <div class="section_heading text-center">
-                                        <h6>Our History</h6>
-                                        <h3>A brief stories of our 2 years company journey</h3>
+                                        <h6>Lokasi Barang</h6>
                                         <div class="line"></div>
                                     </div>
                                 </div>
@@ -325,143 +318,13 @@
                             <div class="row">
                                 <div class="col-12">
                                     <!-- Timeline Area-->
-                                    <div class="apland-timeline-area">
-                                        <!-- Single Timeline Content-->
-                                        <div class="single-timeline-area">
-                                            <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s"
-                                                style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
-                                                <p>Near Future</p>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12 col-md-6 col-lg-12">
-                                                    <div class="single-timeline-content d-flex wow fadeInLeft"
-                                                        data-wow-delay="0.3s"
-                                                        style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
-                                                        <div class="timeline-icon"><i class="fa-solid fa-car-side"
-                                                                aria-hidden="true"></i></div>
-                                                        <div class="timeline-text">
-                                                            <h6>Updated 5.0</h6>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Single Timeline Content-->
-                                        <div class="single-timeline-area">
-                                            <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s"
-                                                style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
-                                                <p>2020</p>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12 col-md-6 col-lg-4">
-                                                    <div class="single-timeline-content d-flex wow fadeInLeft"
-                                                        data-wow-delay="0.3s"
-                                                        style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
-                                                        <div class="timeline-icon"><i class="fa fa-briefcase"
-                                                                aria-hidden="true"></i></div>
-                                                        <div class="timeline-text">
-                                                            <h6>Updated 4.4.0</h6>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Single Timeline Content-->
-                                        <div class="single-timeline-area">
-                                            <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s"
-                                                style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
-                                                <p>2019</p>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12 col-md-6 col-lg-4">
-                                                    <div class="single-timeline-content d-flex wow fadeInLeft"
-                                                        data-wow-delay="0.3s"
-                                                        style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
-                                                        <div class="timeline-icon"><i class="fa fa-id-card"
-                                                                aria-hidden="true"></i></div>
-                                                        <div class="timeline-text">
-                                                            <h6>Updated 4.0</h6>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="apland-timeline-area" id="riwayat-lokasi">
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </section>
-                    <!-- Recent Activity -->
-                    {{-- <div class="card">
-
-                        <div class="card-body">
-
-                            <div class="activity">
-
-                                <div class="activity-item d-flex">
-                                    <div class="activite-label">32 min</div>
-                                    <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                                    <div class="activity-content">
-                                        Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo
-                                            officiis</a> beatae
-                                    </div>
-                                </div><!-- End activity item-->
-
-                                <div class="activity-item d-flex">
-                                    <div class="activite-label">56 min</div>
-                                    <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                                    <div class="activity-content">
-                                        Voluptatem blanditiis blanditiis eveniet
-                                    </div>
-                                </div><!-- End activity item-->
-
-                                <div class="activity-item d-flex">
-                                    <div class="activite-label">2 hrs</div>
-                                    <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                                    <div class="activity-content">
-                                        Voluptates corrupti molestias voluptatem
-                                    </div>
-                                </div><!-- End activity item-->
-
-                                <div class="activity-item d-flex">
-                                    <div class="activite-label">1 day</div>
-                                    <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                                    <div class="activity-content">
-                                        Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati
-                                            voluptatem</a> tempore
-                                    </div>
-                                </div><!-- End activity item-->
-
-                                <div class="activity-item d-flex">
-                                    <div class="activite-label">2 days</div>
-                                    <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                                    <div class="activity-content">
-                                        Est sit eum reiciendis exercitationem
-                                    </div>
-                                </div><!-- End activity item-->
-
-                                <div class="activity-item d-flex">
-                                    <div class="activite-label">4 weeks</div>
-                                    <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-                                    <div class="activity-content">
-                                        Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
-                                    </div>
-                                </div><!-- End activity item-->
-
-                            </div>
-
-                        </div>
-                    </div><!-- End Recent Activity --> --}}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -480,33 +343,98 @@
 
     <!-- JAVASCRIPT FILES -->
     <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/jquery.sticky.js') }}"></script>
     <script src="{{ asset('js/click-scroll.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-
-
+    <script src="{{ asset('dashboard/js/date.format.js') }}"></script>
 
     <script type="text/javascript">
-        const button = document.getElementById("loading-button");
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $('#form-search').validate({
+            submitHandler: function() {
+                var resi = $('#resi').val();
+                var detail = document.getElementById('data-barang');
+                var no_resi = document.getElementById('no-resi');
+                var pemilik = document.getElementById('pemilik');
+                var noData = document.getElementById('no-data');
+                var loading = document.getElementById('loading');
+                var loadingBar = document.getElementById('loading-bar');
+                var tgl = document.getElementById('tgl-lokasi');
+                var jam = document.getElementById('jam-lokasi');
+                var posisi = document.getElementById('posisi');
+                var riwayat = document.getElementById('riwayat-lokasi');
 
-        button.addEventListener("click", () => {
+                detail.style.display = 'none';
+                noData.style.display = 'none';
+                loading.style.display = 'block';
+                loadingBar.style.width = '0%';
+                loadingBar.innerHTML = '0%';
+                setTimeout(() => {
+                    loadingBar.style.width = '25%';
+                    loadingBar.innerHTML = '25%';
+                }, 500);
+                setTimeout(() => {
+                    loadingBar.style.width = '50%';
+                    loadingBar.innerHTML = '50%';
+                }, 1000);
+                setTimeout(() => {
+                    loadingBar.style.width = '75%';
+                    loadingBar.innerHTML = '75%';
+                }, 1250);
+                setTimeout(() => {
+                    loadingBar.style.width = '100%';
+                    loadingBar.innerHTML = '100%';
+                }, 1500);
+                setTimeout(() => {
+                    $.ajax({
+                        url: "{{ route('searchBarang') }}",
+                        type: 'POST',
+                        dataType: "json",
+                        data: {
+                            resi: resi
+                        },
+                        success: function(data) {
+                            let values = Object.values(data);
 
-            // Disable the button to prevent multiple clicks
-            button.disabled = true;
 
-            // Add the loading animation CSS class
+                            loading.style.display = 'none';
+                            detail.style.display = 'block';
+                            no_resi.innerHTML = 'No. Resi: ' + values[0]['no_resi'];
+                            pemilik.innerHTML = 'Pemilik: ' + values[0]['user']['nama'];
+                            $('#riwayat-lokasi').empty();
 
-            button.classList.add("button-loader");
+                            let lokasi = values[0]['lokasi'];
+                            if (lokasi.length > 0) {
+                                let data_lokasi = Object.keys(lokasi);
+                                data_lokasi.forEach(key => {
+                                    let date = new Date(lokasi[key]['created_at']);
+                                    dateFormat.masks.hammerTime = 'HH:MM:ss';
 
-            // Simulate an asynchronous task (replace this with your actual task)
+                                    $('#riwayat-lokasi').append(
+                                        '<div class="single-timeline-area"><div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;"><p>' +
+                                        dateFormat(date, "dd mmm yyyy") +
+                                        '<br>' +
+                                        date.format("hammerTime") +
+                                        '</p></div><div class="row"><div class="col-12 col-md-6 col-lg-12"><div class="single-timeline-content d-flex wow fadeInLeft" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;"><div class="timeline-text"><p id="posisi">' +
+                                        lokasi[key]['posisi'] +
+                                        '</p></div></div></div></div></div>');
+                                });
+                            } else {
+                                $('#riwayat-lokasi').append(
+                                    '<hr><p class="text-center">Lokasi barang belum diperbaharui oleh Admin!</p><hr>'
+                                )
+                            }
+                        }
+                    })
 
-            setTimeout(() => {
-                button.disabled = false;
-
-                // Remove the loading animation CSS class
-                button.classList.remove("button-loader");
-            }, 2000);
+                }, 2000);
+            }
         });
     </script>
 </body>

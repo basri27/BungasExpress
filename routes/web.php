@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\UsersController;
 use App\Livewire\RegisterPost;
 use Illuminate\Routing\RouteGroup;
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function (){
     return view('index');
 })->name('home');
+
+Route::post('search-barang', [Controller::class, 'searchBarang'])->name('searchBarang');
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/register', 'register')->name('regist');
