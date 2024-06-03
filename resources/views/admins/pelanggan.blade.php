@@ -192,6 +192,8 @@
             </div>
         </div>
     @endforeach
+    <div id="edit-section"></div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -199,8 +201,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="staticBackdropLabel">Pemberitahuan!</h5>
                 </div>
                 <div class="modal-body" id="info-success">
 
@@ -321,22 +322,70 @@
                             $('#staticBackdrop').modal('show')
                             document.getElementById('info-success').innerHTML =
                                 "Data berhasil ditambahkan!";
+                            let rowData = Object.values(data);
+
+                            var ubah = $(document).find('[id = edit-section]');
+                            ubah.after($('<div class="modal fade" id="edit' +
+                                rowData[0]['username'] +
+                                '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+                                '<div class="modal-dialog">' +
+                                '<div class="modal-content">' +
+                                '<form action="#" method="POST">' +
+                                '<div class="modal-header">' +
+                                '<h5 class="modal-title" id="exampleModalLabel">Edit Data Pelanggan</h5>' +
+                                '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                                '</div>' +
+                                '<div class="modal-body">' +
+                                '<div class="row">' +
+                                '<div class="col-md-12 mb-2">' +
+                                '<label for="username">Username</label>' +
+                                '<input type="text" id="username-edit" name="username" class="form-control" value="' +
+                                rowData[0]['username'] + '">' +
+                                '</div>' +
+                                '<div class="col-md-12 mb-2">' +
+                                '<label for="no_hp">No. Handphone</label>' +
+                                '<input type="text" id="no-hp-edit" name="no_hp" class="form-control" value="' +
+                                rowData[0]['no_hp'] + '">' +
+                                '</div>' +
+                                '<div class="col-md-12 mb-2">' +
+                                '<label for="nama">Nama</label>' +
+                                '<input type="text" id="nama-edit" name="nama" class="form-control" value="' +
+                                rowData[0]['nama'] + '">' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="modal-footer">' +
+                                '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>' +
+                                '<button type="button" class="btn btn-primary">Simpan</button>' +
+                                '</div>' +
+                                '</form>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>'));
                             dataPelanggan.ajax.reload();
+                            document.getElementById('form-add').reset()
                         },
                         error: function(err) {
                             if (err.status == 422) {
-                                $.each(err.responseJSON.errors, function(i, error) {
-                                    var el = $(document).find('[name="' + i + '"]');
+                                $.each(err.responseJSON.errors, function(i,
+                                    error) {
+                                    var el = $(document).find(
+                                        '[name="' + i + '"]');
                                     el.after($('<span id="error-' + i +
                                         '" style="color: red;"><small>' +
-                                        error[0] + '</small></span>'));
+                                        error[0] +
+                                        '</small></span>'));
                                 });
                             } else if (err.status == 419) {
-                                $.each(err.responseJSON.errors, function(i, error) {
-                                    var el = $(document).find('[name="' + i + '"]');
-                                    el.after($('<span id = "error-' + i +
+                                $.each(err.responseJSON.errors, function(i,
+                                    error) {
+                                    var el = $(document).find(
+                                        '[name="' + i + '"]');
+                                    el.after($('<span id = "error-' +
+                                        i +
                                         '" style="color: red;"><small>' +
-                                        error[0] + '</small></span>'));
+                                        error[0] +
+                                        '</small></span>'));
                                 });
                             }
                         }
