@@ -44,4 +44,5 @@ Route::controller(UsersController::class)->group(function() {
     Route::get('/data-barang/tambah-barang', 'tambahBarang')->name('tambahBarang');
     Route::get('/data-barang/edit-barang/{resi}', 'editBarang')->name('editBarang');
     Route::get('data-barang/lokasi-barang/{resi}', 'lokasiBarang')->name('lokasiBarang');
+    Route::post('/create-data-pelanggan', 'addDataPelanggan')->name('addDataPelanggan');
 });

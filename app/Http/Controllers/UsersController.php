@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
@@ -29,11 +31,15 @@ class UsersController extends Controller
         $totalPelanggan = User::where('role', 'pelanggan')->count();
         if($pesananToday != 0 && $pesananYesterday != 0) {
             $percentagePesanan = ($pesananToday-$pesananYesterday)/$pesananYesterday*100;
+        }elseif ($pesananToday == 0 && $pesananYesterday !=0) {
+            $percentagePesanan = ($pesananToday-$pesananYesterday)/$pesananYesterday*100;
         }elseif ($pesananYesterday == 0) {
             $percentagePesanan = $pesananToday*100;
         }
 
         if($pelangganToday != 0 && $pelangganYesterday != 0) {
+            $percentagePelanggan = ($pelangganToday-$pelangganYesterday)/$pelangganYesterday*100;
+        }elseif ($pelangganToday == 0 && $pelangganYesterday !=0) {
             $percentagePelanggan = ($pelangganToday-$pelangganYesterday)/$pelangganYesterday*100;
         }elseif ($pelangganYesterday == 0) {
             $percentagePelanggan = $pelangganToday*100;
@@ -118,5 +124,30 @@ class UsersController extends Controller
         $lokasis = Lokasi::where('barang_id', $barang->id)->orderBy('created_at', 'desc')->get();
 
         return view('admins.lokasi-barang', compact('barang', 'lokasis'));
+    }
+
+    public function addDataPelanggan(Request $request) {
+        $this->validate($request, [
+            'username' => 'required|unique:users,username',
+            'no_hp' => 'required|numeric',
+            'nama' => "required|regex:/^[a-zA-Z.,'Ññ\s]+$/",
+        ], [
+            'username.required' => 'Data username tidak boleh kosong!',
+            'nama.required' => 'Data nama tidak boleh kosong!',
+            'no_hp.required' => 'Data nomor hp tidak boleh kosong!',
+            'nama.regex' => 'Format nama yang Anda masukkan tidak valid atau tidak boleh mengandung angka!',
+            'no_hp.numeric' => 'Nomor handphone '. $request->input('no_hp') .' tidak valid!',
+            'username.unique' => 'Username ' . $request->input('username') . ' telah digunakan',
+        ]);
+
+        User::create([
+            'username' => $request->input('username'),
+            'nama' => $request->input('nama'),
+            'no_hp' => $request->input('no_hp'),
+            'password' => Hash::make('11223344'),
+            'role' => 'pelanggan'
+        ]);
+
+        return response()->json(['data' => $request->all()]);
     }
 }
