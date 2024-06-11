@@ -8,10 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
@@ -21,6 +18,7 @@ class UsersController extends Controller
     }
     
     public function dashboard() {
+        $user = User::find(Auth::user()->id);
         $today = Barang::whereDate('created_at', Carbon::now())->get();
         $yesterday = Barang::whereDate('created_at', Carbon::yesterday())->get();
         $pesananToday = $today->count();
@@ -95,7 +93,7 @@ class UsersController extends Controller
         return view('admins.pelanggan', compact('pelanggans'));
     }
 
-    public function allPelanggan() {
+    public function dataTablePelanggan() {
         $query = User::where('role', 'pelanggan')->get();
         $totalRecord = $query->count();
 
@@ -148,6 +146,81 @@ class UsersController extends Controller
             'role' => 'pelanggan'
         ]);
 
-        return response()->json(['data' => $request->all()]);
+        return response()->json(['data' => $request->all(), 'success' => "Data berhasil ditambahkan!"]);
+    }
+    
+    public function editDataPelanggan(Request $request) {
+        $user = User::find($request->input('id'));
+        if($request->input('username') != $user->username) {
+            $this->validate($request, [
+                'username' => 'required|unique:users,username',
+                'no_hp' => 'required|numeric',
+                'nama' => "required|regex:/^[a-zA-Z.,'Ññ\s]+$/",
+            ], [
+                'username.required' => 'Data username tidak boleh kosong!',
+                'nama.required' => 'Data nama tidak boleh kosong!',
+                'no_hp.required' => 'Data nomor hp tidak boleh kosong!',
+                'nama.regex' => 'Format nama yang Anda masukkan tidak valid atau tidak boleh mengandung angka!',
+                'no_hp.numeric' => 'Nomor handphone '. $request->input('no_hp') .' tidak valid!',
+                'username.unique' => 'Username ' . $request->input('username') . ' telah digunakan',
+            ]);
+        }else {
+            $this->validate($request, [
+                'no_hp' => 'required|numeric',
+                'nama' => "required|regex:/^[a-zA-Z.,'Ññ\s]+$/",
+            ], [
+                'nama.required' => 'Data nama tidak boleh kosong!',
+                'no_hp.required' => 'Data nomor hp tidak boleh kosong!',
+                'nama.regex' => 'Format nama yang Anda masukkan tidak valid atau tidak boleh mengandung angka!',
+                'no_hp.numeric' => 'Nomor handphone '. $request->input('no_hp') .' tidak valid!',
+                'username.unique' => 'Username ' . $request->input('username') . ' telah digunakan',
+            ]);
+        }
+
+        $user->update([
+            'username' => $request->input('username'),
+            'nama' => $request->input('nama'),
+            'no_hp' => $request->input('no_hp')
+        ]);
+
+        return response()->json(['data' => $user, 'success' => "Data berhasil diubah!"]);
+    }
+
+    public function deleteDataPelanggan(Request $request) {
+        $user = User::find($request->input('id'));
+        $barangs = Barang::with('lokasi')->where('user_id', $user->id)->get();
+        $lokasi = [];
+        foreach ($barangs as $barang) {
+            if($barang->lokasi != null) {
+                foreach ($barang->lokasi as $loc) {
+                    $loc->delete();
+                }
+            }
+            $barang->delete();
+        }
+        $user->delete();
+
+        return response()->json(['data' => $user, 'barang' => $barangs, 'lokasi' => $lokasi, 'success' => 'Data berhasil dihapus!']);
+    }
+
+    public function resetPasswordPelanggan(Request $request) {
+        $pelanggan = User::find($request->input('id'));
+        if ($request->input('password') == null) {
+            $this->validate($request, [
+                'password' => 'required'
+            ], [
+                'password.required' => 'Anda harus memasukkan password!'
+            ]);
+        }else {
+            $pw = Hash::check($request->input('password'), Auth::user()->password);
+            if ($pw == false) {
+                return response()->json(['data' => $pw]);
+            }elseif ($pw == true) {
+                $pelanggan->update([
+                    'password' => Hash::make('bungasXpress99')
+                ]);
+                return response()->json(['data' => $pw, 'success' => 'Password pelanggan berhasil diatur ulang!']);
+            }
+        }
     }
 }

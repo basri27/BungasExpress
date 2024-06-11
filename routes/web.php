@@ -40,9 +40,12 @@ Route::controller(UsersController::class)->group(function() {
     Route::get('get-all-data-barang', 'allBarang')->name('allBarang');
     Route::get('get-barang-today', 'barangToday');
     Route::get('/data-pelanggan', 'dataPelanggan')->name('pelanggan');
-    Route::get('get-all-data-pelanggan', 'allPelanggan')->name('allPelanggan');
+    Route::get('get-all-data-pelanggan', 'dataTablePelanggan')->name('dataTablePelanggan');
     Route::get('/data-barang/tambah-barang', 'tambahBarang')->name('tambahBarang');
     Route::get('/data-barang/edit-barang/{resi}', 'editBarang')->name('editBarang');
     Route::get('data-barang/lokasi-barang/{resi}', 'lokasiBarang')->name('lokasiBarang');
     Route::post('/create-data-pelanggan', 'addDataPelanggan')->name('addDataPelanggan');
+    Route::post('/update-data-pelanggan', 'editDataPelanggan')->name('editDataPelanggan');
+    Route::post('/delete-data-pelanggan', 'deleteDataPelanggan')->name('deleteDataPelanggan');
+    Route::post('/reset-password-data-pelanggan', 'resetPasswordPelanggan')->name('resetPWPelanggan');
 });
